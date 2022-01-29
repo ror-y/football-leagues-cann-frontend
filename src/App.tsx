@@ -1,26 +1,69 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./index.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { TParsedTeam } from "./types";
+import { TableRow } from "./TableRow";
 
-function App() {
+export default function App() {
+  const [data, setData] = useState<Array<Array<TParsedTeam> | null>>([]);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const get = async () => {
+      const leagues = [
+        "premier-league",
+        // "bundesliga",
+        // "la-liga",
+        // "serie-a",
+        // "ligue-1",
+      ];
+
+      const requestUrlBase = "http://localhost:1338/api/cann-data";
+
+      try {
+        axios
+          .all(
+            leagues.map((league) => axios.get(`${requestUrlBase}/${league}`))
+          )
+          .then(
+            axios.spread((...responses) => {
+              setIsError(false);
+              responses.forEach((r) => {
+                setData((prv) => [...prv, r.data]);
+              });
+            })
+          )
+          .catch((err) => {
+            console.log("ERROR:", err);
+            setIsError(true);
+          });
+      } catch (err) {
+        console.log("ERROR:", err);
+        setIsError(true);
+      }
+    };
+
+    get();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <table>
+        {data.map((league, i) => {
+          return (
+            <tbody
+              key={i + 100}
+              style={{
+                fontSize: "30px",
+              }}
+            >
+              {league?.map((team, i) => (
+                <TableRow team={team} key={i} />
+              ))}
+            </tbody>
+          );
+        })}
+      </table>
     </div>
   );
 }
-
-export default App;
