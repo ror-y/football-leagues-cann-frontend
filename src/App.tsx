@@ -18,9 +18,9 @@ export default function App () {
         'ligue-1',
       ];
 
-      const requestUrlBase = 'http://localhost:1338/api/cann-data';
-      // const requestUrlBase =
-      //   "https://serene-headland-51052.herokuapp.com/api/cann-data";
+      // const requestUrlBase = 'http://localhost:1338/api/cann-data';
+      const requestUrlBase =
+        "https://serene-headland-51052.herokuapp.com/api/cann-data";
 
       try {
         axios
