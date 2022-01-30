@@ -3,10 +3,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TParsedTeam } from './types';
 import { TableRow } from './TableRow';
+import { Loading } from './Loading'
 
 export default function App () {
   const [data, setData] = useState<Array<Array<TParsedTeam> | null>>([]);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const get = async () => {
@@ -20,7 +22,7 @@ export default function App () {
 
       // const requestUrlBase = 'http://localhost:1338/api/cann-data';
       const requestUrlBase =
-        "https://serene-headland-51052.herokuapp.com/api/cann-data";
+        'https://serene-headland-51052.herokuapp.com/api/cann-data';
 
       try {
         axios
@@ -38,10 +40,13 @@ export default function App () {
           .catch((err) => {
             console.log('ERROR:', err);
             setIsError(true);
-          });
+          }).finally(() => {
+          setIsLoading(false)
+        });
       } catch (err) {
         console.log('ERROR:', err);
         setIsError(true);
+        setIsLoading(false)
       }
     };
 
@@ -49,19 +54,19 @@ export default function App () {
   }, []);
 
   return (
-    <div style={{ display: 'flex' }}>
-      {data.map((league, i) => {
+    <div style={{ display: 'flex', padding: '5px' }}>
+      {isLoading ? <Loading/> : data.map((league, i) => {
         return (
-          <div style={{padding: '10px', flexGrow: 1}}>
+          <div style={{ padding: '5px', flexGrow: 1 }}>
             <div
               key={i + 100}
               style={{
                 fontSize: '10px',
               }}
             >
-            {league?.map((team, i) => (
-              <TableRow team={team} key={i}/>
-            ))}
+              {league?.map((team, i) => (
+                <TableRow team={team} key={i}/>
+              ))}
             </div>
           </div>
         );

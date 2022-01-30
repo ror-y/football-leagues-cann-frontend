@@ -15,7 +15,7 @@ export const TableRow: React.FC<IProps> = ({ team }) => {
       <div style={{ display: 'flex' }}>
         {team.map((t, i) => (
           <Fragment key={i + 50}>
-            {i === 0 && <td style={{ padding: '0 30px' }}>{t.points}</td>}
+            {i === 0 && <td style={{ padding: '0 20px' }}>{t.points}</td>}
             {t.name && t.logo && <TeamCell name={t.name} logo={t.logo}/>}
           </Fragment>
         ))}
@@ -27,7 +27,7 @@ export const TableRow: React.FC<IProps> = ({ team }) => {
 const TeamCell: React.FC<{ name: string; logo: string }> = ({ name, logo }) => {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <img style={{ height: '14px', marginRight: '10px' }} src={logo}/>
+      <img style={{ height: '14px', marginRight: '5px' }} src={logo}/>
       <span style={{ marginRight: '10px' }}>{name}</span>
     </div>
   );
